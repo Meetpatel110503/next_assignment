@@ -52,7 +52,6 @@ const Home = () => {
     setSearchQuery(data.searchQuery)
     if (data.searchQuery.trim() !== "") {
       fetchWeatherData()
-      fetchForecastData()
     }
   }
 

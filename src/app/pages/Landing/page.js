@@ -13,7 +13,7 @@ const LandingPage = () => {
       </h1>
       <Link href='/pages/home'>
         <button className='bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-300 text-lg md:text-xl'>
-          Go to Home
+          Check Weather
         </button>
       </Link>
     </div>
