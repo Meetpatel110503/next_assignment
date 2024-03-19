@@ -1,10 +1,10 @@
 "use client"
 import LandingPage from "./pages/Landing/page"
 
-export default function Home() {
+export default function page() {
   return (
-    <main>
+    <div>
       <LandingPage />
-    </main>
+    </div>
   )
 }

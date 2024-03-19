@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { useForm } from "react-hook-form"
-import Loader from "../../components/Loader"
+import Loader from "@/app/components/Loader"
 
 const Home = () => {
   const { register, handleSubmit } = useForm()
@@ -28,6 +28,7 @@ const Home = () => {
     }
     setLoading(false)
   }
+
   const fetchWeatherData = async () => {
     try {
       setLoading(true)
@@ -80,7 +81,7 @@ const Home = () => {
         backgroundPosition: "center",
       }}
     >
-      <div className='weather-card border border-blue-200 bg-white shadow-lg rounded-lg p-6 m-8 '>
+      <div className='weather-card border border-blue-200 bg-white shadow-lg rounded-lg p-6 m-8 md:w-96 lg:w-120'>
         <h1 className='title text-4xl font-bold mb-8 text-center'>
           Weather App
         </h1>
@@ -92,12 +93,12 @@ const Home = () => {
             type='text'
             {...register("searchQuery")}
             placeholder='Enter city name or ZIP code'
-            className='input-box border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500 mb-4 w-64 '
+            className='input-box border border-gray-300 rounded-md px-3 py-2 outline-none focus:border-blue-500 mb-4 w-full'
             required
           />
           <button
             type='submit'
-            className='bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-300'
+            className='bg-blue-500 text-white rounded-md px-4 py-2 hover:bg-blue-600 transition duration-300 w-full'
           >
             Search
           </button>

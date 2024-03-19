@@ -19,19 +19,21 @@ export default function RootLayout({ children }) {
           rel='stylesheet'
         />
       </head>
-      <body className={inter.className}>{children}</body>
-      <ToastContainer
-        position='top-center'
-        autoClose={1000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme='colored'
-      />
+      <body className={inter.className}>
+        {children}
+        <ToastContainer
+          position='top-center'
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme='colored'
+        />
+      </body>
     </html>
   )
 }
