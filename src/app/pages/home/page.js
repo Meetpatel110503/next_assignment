@@ -3,6 +3,8 @@ import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 import Loader from "@/app/components/Loader"
+import { API_URL } from "../config/Config"
+import { ERROR } from "../config/Config"
 
 const Home = () => {
   const { register, handleSubmit } = useForm()
@@ -13,9 +15,9 @@ const Home = () => {
   const [error, setError] = useState("")
   const [unit, setUnit] = useState("metric")
 
-  const API_KEY = "c2a7af4ca4c15109c096898a0f92415e"
-  const URL = `https://api.openweathermap.org/data/2.5/weather?appid=${API_KEY}&units=${unit}&q=`
-  const FORECAST_URL = `https://api.openweathermap.org/data/2.5/forecast?appid=${API_KEY}&units=${unit}&q=`
+  const API_KEY = process.env.NEXT_PUBLIC_API_KEY
+  const URL = `${API_URL}/weather?appid=${API_KEY}&units=${unit}&q=`
+  const FORECAST_URL = `${API_URL}/forecast?appid=${API_KEY}&units=${unit}&q=`
 
   const fetchForecastData = async () => {
     try {
@@ -24,7 +26,7 @@ const Home = () => {
       const response = await axios.get(FORECAST_URL + searchQuery)
       setForecastData(response.data)
     } catch (error) {
-      setError("Invalid city or zipcode")
+      setError(ERROR)
     }
     setLoading(false)
   }
@@ -37,7 +39,7 @@ const Home = () => {
       setWeatherData(response.data)
       fetchForecastData()
     } catch (error) {
-      setError("Invalid city or zipcode")
+      setError(ERROR)
     }
     setLoading(false)
   }
