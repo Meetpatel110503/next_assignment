@@ -1,16 +1,16 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import axios from "axios"
 import { useForm } from "react-hook-form"
 import Loader from "@/app/components/Loader"
 import { API_URL } from "../config/Config"
 import { ERROR } from "../config/Config"
 
-const Home = () => {
+const Home = ({ initialWeatherData, initialForecastData }) => {
   const { register, handleSubmit } = useForm()
   const [searchQuery, setSearchQuery] = useState("")
-  const [weatherData, setWeatherData] = useState("")
-  const [forecastData, setForecastData] = useState("")
+  const [weatherData, setWeatherData] = useState(initialWeatherData)
+  const [forecastData, setForecastData] = useState(initialForecastData)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [unit, setUnit] = useState("metric")
@@ -19,41 +19,33 @@ const Home = () => {
   const URL = `${API_URL}/weather?appid=${API_KEY}&units=${unit}&q=`
   const FORECAST_URL = `${API_URL}/forecast?appid=${API_KEY}&units=${unit}&q=`
 
-  const fetchForecastData = async () => {
+  const fetchWeatherData = async (query) => {
     try {
       setLoading(true)
       setError("")
-      const response = await axios.get(FORECAST_URL + searchQuery)
+      const response = await axios.get(URL + query)
+      setWeatherData(response.data)
+      fetchForecastData(query)
+    } catch (error) {
+      setError(ERROR)
+    }
+    setLoading(false)
+  }
+
+  const fetchForecastData = async (query) => {
+    try {
+      const response = await axios.get(FORECAST_URL + query)
       setForecastData(response.data)
     } catch (error) {
       setError(ERROR)
     }
-    setLoading(false)
   }
-
-  const fetchWeatherData = async () => {
-    try {
-      setLoading(true)
-      setError("")
-      const response = await axios.get(URL + searchQuery)
-      setWeatherData(response.data)
-      fetchForecastData()
-    } catch (error) {
-      setError(ERROR)
-    }
-    setLoading(false)
-  }
-
-  useEffect(() => {
-    if (searchQuery.trim() !== "") {
-      fetchWeatherData()
-    }
-  }, [searchQuery])
 
   const handleFormSubmit = (data) => {
-    setSearchQuery(data.searchQuery)
-    if (data.searchQuery.trim() !== "") {
-      fetchWeatherData()
+    const query = data.searchQuery.trim()
+    if (query) {
+      setSearchQuery(query)
+      fetchWeatherData(query)
     }
   }
 
@@ -185,6 +177,31 @@ const Home = () => {
       </div>
     </div>
   )
+}
+
+Home.getStaticProps = async () => {
+  const API_KEY = process.env.NEXT_PUBLIC_API_KEY
+  const URL = `${API_URL}/weather?appid=${API_KEY}&q=Valsad`
+  const FORECAST_URL = `${API_URL}/forecast?appid=${API_KEY}&q=Valsad`
+
+  try {
+    const [weatherResponse, forecastResponse] = await Promise.all([
+      axios.get(URL),
+      axios.get(FORECAST_URL),
+    ])
+
+    return {
+      props: {
+        initialWeatherData: weatherResponse.data,
+        initialForecastData: forecastResponse.data,
+      },
+    }
+  } catch (error) {
+    return {
+      initialWeatherData: null,
+      initialForecastData: null,
+    }
+  }
 }
 
 export default Home
